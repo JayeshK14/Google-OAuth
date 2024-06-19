@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+</head>
+<body>
+    <h1>Sign Up Page</h1>
+    <form action="">
+        <label for="firstName">First Name</label>
+        <input required type="text" name="firstName" id="">
+        <br></br>
+        <label for="lastName">Last Name</label>
+        <input type="text" name="lastName" id="">
+        <br></br>
+        <label for="email">Email</label>
+        <input required type="email" name="email" id="">
+        <br></br>
+        <label for="password">Password</label>
+        <input required type="password" name="password" id="">
+        <br></br>
+        <input type="submit" value="Sign Up">
+    </form>
+</body>
+
+<script>
+    const form = document.querySelector("form")
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const firstName = form.firstName.value;
+        const lastName = form.lastName.value;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        try{
+            const response = await fetch("/auth/signup", {
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify({
+                    firstName,
+                    lastName,
+                    email, 
+                    password,
+                }),
+            })
+
+            const data = await response.json();
+            if(response.status === 200){
+                alert("Sign Up Successful");
+                window.location.href = "/auth/login";
+            }
+            else{
+                alert("Sign Up Failed!")
+            }
+        }
+        catch(error){
+            console.log(error);
+            alert("Something went wrong!");
+        }
+    })
+</script>
+</html>

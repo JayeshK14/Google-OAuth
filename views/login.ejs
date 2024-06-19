@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login Page</h1>
+    <form action="">
+        <label for="email">Email</label>
+        <input required type="email" name="email" id="">
+        <br></br>
+        <label for="password">Password</label>
+        <input required type="password" name="password" id="">
+        <br></br>
+        <input type="submit" value="Login">
+    </form>
+
+    <br />
+    <br />
+    <br />
+
+    <a href="/auth/google">Login with Google</a>
+</body>
+
+<script>
+    const form = document.querySelector("form")
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = form.email.value;
+        const password = form.password.value;
+
+        try{
+            const response = await fetch("/auth/login", {
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify({
+                    email, 
+                    password,
+                })
+            })
+
+            const data = await response.json();
+            if(response.status === 200){
+                window.location.href = "/user/dashboard";
+            }
+            else{
+                if(data.redirect_url){
+                    window.location.href = data.redirect_url;
+                }
+                else{
+                    alert("Login Failed!");
+                }
+            }
+        }
+        catch(error){
+            console.log(error);
+            alert("Something went wrong!");
+        }
+    })
+</script>
+</html>
